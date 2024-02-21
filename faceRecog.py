@@ -1,4 +1,4 @@
-    # Made with references from Face Recognition with Real Time Database from Murtaza's Workshop Channel on Youtube
+# Made with references from Face Recognition with Real Time Database from Murtaza's Workshop Channel on Youtube
 # (https://www.youtube.com/watch?v=iBomaK2ARyI)
 
 import pickle
@@ -15,10 +15,14 @@ import time
 def recognize_face():
     cred = credentials.Certificate("serviceAccountKey.json")
     firebase_admin.initialize_app(cred, {
-        'databaseURL': "https://faceattendancerealtime-edd47-default-rtdb.asia-southeast1.firebasedatabase.app/",
-        'storageBucket': "faceattendancerealtime-edd47.appspot.com"
+        'databaseURL': "XXX",                   ## Put in the database URL provided by firebase
+        'storageBucket': "XXX"                  ## Put in the storage bucket URL provided by firebase
     })
-    student_db = db.reference(f'Mahasiswa_IEE_2021').get()
+    student_db = db.reference(f'XXX').get()     ## Put in your database name
+
+    # student_db = {'001': {'name': 'Sugondese Dover', 'others': 'blabla'},
+    #               '002': {'name': 'Ben Bols', 'others': 'bleble'}}
+    ## Or put in your data as a dictionary like the dictionary above
 
     cap = cv2.VideoCapture(0)
     cap.set(3, 640)
@@ -47,15 +51,18 @@ def recognize_face():
                 matchIndex = np.argmin(faceDis)
                 if matches[matchIndex]:
                     studId = studentIds[matchIndex]
-                    name = student_db[str(studId)]['nama']
+                    name = student_db[str(studId)]['name']
                     detected.append(name)
                     m = 4
-                    img = cv2.rectangle(img, (faceLoc[0] * m, faceLoc[1]), (faceLoc[0] * m + faceLoc[2] * m, faceLoc[1] + faceLoc[3] * m), (255, 0, 0), 2)
+                    img = cv2.rectangle(img, (faceLoc[0] * m, faceLoc[1]),
+                                        (faceLoc[0] * m + faceLoc[2] * m, faceLoc[1] + faceLoc[3] * m), (255, 0, 0), 2)
                     text = '%s, distance=%.2f' % (name, faceDis[matchIndex])
-                    cv2.putText(img, text, (faceLoc[0] * m, faceLoc[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-                    cv2.putText(img, f"{round((len(detected)/target_length*100), 2)}%", (0, 45), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2)
+                    cv2.putText(img, text, (faceLoc[0] * m, faceLoc[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                                (255, 0, 0), 2)
+                    cv2.putText(img, f"{round((len(detected) / target_length * 100), 2)}%", (0, 45),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2)
                     ft_stop = time.time()
-                    frame_times.append(ft_stop-ft_start)
+                    frame_times.append(ft_stop - ft_start)
 
         cv2.imshow("Webcam", img)
         success, img = cap.read()
@@ -64,11 +71,11 @@ def recognize_face():
     stop = time.time()
 
     hist_name = Counter(detected)
-    print(f"Loop finished in {stop-start} seconds")
+    print(f"Loop finished in {stop - start} seconds")
     print(f"Average Detection frame time: {round(np.average(frame_times), 3)} seconds\n")
     print("Name Frequency and Detection Percentage:")
     for i in hist_name.keys():
-        print(f"\t{i}: {hist_name[i]}, {round((hist_name[i]/len(detected)*100), 2)}%")
+        print(f"\t{i}: {hist_name[i]}, {round((hist_name[i] / len(detected) * 100), 2)}%")
 
 
 recognize_face()
