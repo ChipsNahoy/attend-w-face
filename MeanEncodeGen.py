@@ -9,10 +9,14 @@ import numpy as np
 
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred, {
-    'databaseURL': "https://faceattendancerealtime-edd47-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    'storageBucket': "faceattendancerealtime-edd47.appspot.com"
+    'databaseURL': "XXX",
+    'storageBucket': "XXX"
 })
-student_db = db.reference(f'Mahasiswa_IEE_2021').get()
+student_db = db.reference(f'XXX').get()
+
+# student_db = {'001': {'name': 'Sugondese Dover', 'others': 'blabla'},
+#               '002': {'name': 'Ben Bols', 'others': 'bleble'}}
+## Or put in your data as a dictionary like the dictionary above
 
 dataset_path = "dataset_new"
 stud_ids = os.listdir(dataset_path)
